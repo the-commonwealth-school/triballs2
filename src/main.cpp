@@ -13,15 +13,18 @@
 #define BLUE_RPM 600
 #define RED_RPM 100
 
-pros::Controller ctrler(pros::E_CONTROLLER_MASTER);
-pros::Motor 
-    left_front(PORT_MOTOR_FL,pros::motor_gearset_e_t::E_MOTOR_GEAR_600, 1),
-    left_back(PORT_MOTOR_BL, pros::motor_gearset_e_t::E_MOTOR_GEAR_600, 1),
-    right_front(PORT_MOTOR_FR, pros::motor_gearset_e_t::E_MOTOR_GEAR_600, 0),
-    right_back(PORT_MOTOR_BR, pros::motor_gearset_e_t::E_MOTOR_GEAR_600, 0),
-    lift(PORT_MOTOR_LIFT, pros::motor_gearset_e_t::E_MOTOR_GEAR_100, 1),
-    intake(PORT_MOTOR_INTAKE, pros::motor_gearset_e_t::E_MOTOR_GEAR_200, 0);
-pros::Motor_Group
+using namespace std;
+using namespace pros;
+
+Controller ctrler(E_CONTROLLER_MASTER);
+Motor 
+    left_front(PORT_MOTOR_FL,motor_gearset_e_t::E_MOTOR_GEAR_600, 1),
+    left_back(PORT_MOTOR_BL, motor_gearset_e_t::E_MOTOR_GEAR_600, 1),
+    right_front(PORT_MOTOR_FR, motor_gearset_e_t::E_MOTOR_GEAR_600, 0),
+    right_back(PORT_MOTOR_BR, motor_gearset_e_t::E_MOTOR_GEAR_600, 0),
+    lift(PORT_MOTOR_LIFT, motor_gearset_e_t::E_MOTOR_GEAR_100, 1),
+    intake(PORT_MOTOR_INTAKE, motor_gearset_e_t::E_MOTOR_GEAR_200, 0);
+Motor_Group
     group_left_drive ({left_front, left_back}),
     group_right_drive ({right_front, right_back});
 
@@ -30,9 +33,9 @@ void on_center_button() {
     static bool pressed = false;
     pressed = !pressed;
     if (pressed) {
-        pros::lcd::set_text(2, "hello  there");
+        lcd::set_text(2, "hello  there");
     } else {
-        pros::lcd::clear_line(2);
+        lcd::clear_line(2);
     }
 }
 
@@ -43,11 +46,11 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    pros::lcd::initialize();
-    pros::lcd::set_text(1, "balls :3");
-    group_left_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
-    group_right_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
-    lift.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_COAST);
+    lcd::initialize();
+    lcd::set_text(1, "balls :3");
+    group_left_drive.set_brake_modes(motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+    group_right_drive.set_brake_modes(motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+    lift.set_brake_mode(motor_brake_mode_e_t::E_MOTOR_BRAKE_COAST);
 }
 
 /**
@@ -67,7 +70,7 @@ void disabled() {}
  * starts.
  */
 void competition_initialize() {
-    pros::lcd::set_text(2, "Competition Init");
+    lcd::set_text(2, "Competition Init");
 }
 
 /**
@@ -136,6 +139,6 @@ void opcontrol() {
             intake.brake();
         }
 
-        pros::delay(20);
+        delay(20);
     }
 }
