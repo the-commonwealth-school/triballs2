@@ -4,3 +4,6 @@
 [submodule "vuejs-docs"]
 	path = vuejs-docs
 	url = https://github.com/vuejs/docs
+[submodule "angular"]
+	path = angular
+	url = https://github.com/angular/angular.js
