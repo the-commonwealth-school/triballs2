@@ -1,0 +1,3 @@
+[submodule "vuejs"]
+	path = vuejs
+	url = https://github.com/vuejs/core
