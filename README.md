@@ -2,5 +2,5 @@
 
 pending better name.
 
-endorsed by linus torvalds.
+endorsed by Linus Torvalds.
 endorsed by Thomas Zhou
