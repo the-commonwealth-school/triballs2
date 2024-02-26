@@ -1,13 +1,11 @@
 #include "main.h"
 
-
 #define PORT_MOTOR_FL 10        /* Front left.*/
 #define PORT_MOTOR_BL 9         /* Back left.*/
 #define PORT_MOTOR_FR 20        /* Front right. */
 #define PORT_MOTOR_BR 19        /* Back right.*/
 #define PORT_MOTOR_INTAKE 8
 #define PORT_MOTOR_LIFT 2
-
 
 #define MOTOR_MAX  127
 #define GREEN_RPM 200
@@ -25,12 +23,8 @@ pros::Motor intake(PORT_MOTOR_INTAKE, pros::motor_gearset_e_t::E_MOTOR_GEAR_200,
 pros::Motor_Group group_left_drive ({left_front, left_back});
 pros::Motor_Group group_right_drive ({right_front, right_back});
 
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
+
+/* Center button callback. */
 void on_center_button() {
     static bool pressed = false;
     pressed = !pressed;
@@ -122,22 +116,26 @@ void opcontrol() {
         int ubtn_val = ctrler.get_digital(DIGITAL_UP);      /* Up arrow button value.*/
         int dbtn_val = ctrler.get_digital(DIGITAL_DOWN);    /* Down arrow button value.*/
 
-        group_left_drive.move(lunubbin_val ? 127 : (llnubbin_val ? -127 : ljoy_val));
-        group_right_drive.move(lunubbin_val ? 127 : (llnubbin_val ? -127 : rjoy_val));
+#if 0 /* Drivetrain bOrked for now, don't use for fear of breakage. */
+        if (ljoy_val == 0) { group_left_drive.brake(); goto nomove; }
+        if (rjoy_val == 0) { group_right_drive.brake(); goto nomove; }
 
-        if(ljoy_val == 0) group_left_drive.brake();
-        if(rjoy_val == 0) group_right_drive.brake();
+        group_left_drive.move(lunubbin_val ? MOTOR_MAX : (llnubbin_val ? -MOTOR_MAX : ljoy_val));
+        group_right_drive.move(lunubbin_val ? MOTOR_MAX : (llnubbin_val ? -MOTOR_MAX : rjoy_val));
+
+        nomove:
+#endif
 
         if (ubtn_val) {
-            lift.move_velocity(100);
+            lift.move_velocity(RED_RPM);
         } else if (dbtn_val) {
-            lift.move_velocity(-100);
+            lift.move_velocity(-RED_RPM);
         }
         
         if (runubbin_val) {
-            intake.move_velocity(200);
+            intake.move_velocity(GREEN_RPM);
         } else if (rlnubbin_val) {
-            intake.move_velocity(-200);
+            intake.move_velocity(-GREEN_RPM);
         }
 
         pros::delay(20);
