@@ -87,7 +87,13 @@ void competition_initialize() {
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+    /* Spin.*/
+    while (1) {
+        group_right_drive.move(127);
+        group_left_drive.move(-127);
+    }
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -103,7 +109,6 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-
     while (true) {
         int ljoy_val = ctrler.get_analog(ANALOG_LEFT_Y);    /* Left joystick value.*/
         int rjoy_val = ctrler.get_analog(ANALOG_LEFT_Y);    /* Right joystick value.*/
@@ -123,11 +128,13 @@ void opcontrol() {
         if(ljoy_val == 0) group_left_drive.brake();
         if(rjoy_val == 0) group_right_drive.brake();
 
-        if(ubtn_val) {
+        if (ubtn_val) {
             lift.move_velocity(100);
         } else if (dbtn_val) {
             lift.move_velocity(-100);
-        } else if (runubbin_val) {
+        }
+        
+        if (runubbin_val) {
             intake.move_velocity(200);
         } else if (rlnubbin_val) {
             intake.move_velocity(-200);
