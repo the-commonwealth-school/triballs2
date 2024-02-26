@@ -105,26 +105,33 @@ void autonomous() {}
 void opcontrol() {
 
     while (true) {
-        // Get the joystick values for each side (adjust based on controller configuration)
-        int left_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
-        int right_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
+        int ljoy_val = ctrler.get_analog(ANALOG_LEFT_Y);    /* Left joystick value.*/
+        int rjoy_val = ctrler.get_analog(ANALOG_LEFT_Y);    /* Right joystick value.*/
 
-        group_left_drive.move(left_joy_value);
-        group_right_drive.move(right_joy_value);
+        int lunubbin_val = ctrler.get_digital(DIGITAL_L1);  /* Left upper nubbin value.*/
+        int llnubbin_val = ctrler.get_digital(DIGITAL_L2);  /* Left lower nubbin value.*/
 
-        if(left_joy_value == 0) group_left_drive.brake();
-        if(right_joy_value == 0) group_right_drive.brake();
+        int runubbin_val = ctrler.get_digital(DIGITAL_R1);  /* Right upper nubbin value.*/
+        int rlnubbin_val = ctrler.get_digital(DIGITAL_R2);  /* Right lower nubbin value.*/
 
-        if(ctrler.get_digital(DIGITAL_UP)){
+        int ubtn_val = ctrler.get_digital(DIGITAL_UP);      /* Up arrow button value.*/
+        int dbtn_val = ctrler.get_digital(DIGITAL_DOWN);    /* Down arrow button value.*/
+
+        group_left_drive.move(lunubbin_val ? 127 : (llnubbin_val ? -127 : ljoy_val));
+        group_right_drive.move(lunubbin_val ? 127 : (llnubbin_val ? -127 : rjoy_val));
+
+        if(ljoy_val == 0) group_left_drive.brake();
+        if(rjoy_val == 0) group_right_drive.brake();
+
+        if(ubtn_val) {
             lift.move_velocity(100);
-        } else if (ctrler.get_digital(DIGITAL_DOWN)){
+        } else if (dbtn_val) {
             lift.move_velocity(-100);
-        } else if (ctrler.get_digital(DIGITAL_R1)){
+        } else if (runubbin_val) {
             intake.move_velocity(200);
-        } else if (ctrler.get_digital(DIGITAL_R2)){
+        } else if (rlnubbin_val) {
             intake.move_velocity(-200);
-        } 
-
+        }
 
         pros::delay(20);
     }
