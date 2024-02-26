@@ -1,10 +1,10 @@
 #include "main.h"
 
 
-#define PORT_MOTOR_FL 10
-#define PORT_MOTOR_BL 9
-#define PORT_MOTOR_FR 20
-#define PORT_MOTOR_BR 19
+#define PORT_MOTOR_FL 10        /* Front left.*/
+#define PORT_MOTOR_BL 9         /* Back left.*/
+#define PORT_MOTOR_FR 20        /* Front right. */
+#define PORT_MOTOR_BR 19        /* Back right.*/
 #define PORT_MOTOR_INTAKE 8
 #define PORT_MOTOR_LIFT 2
 
@@ -32,13 +32,13 @@ pros::Motor_Group group_right_drive ({right_front, right_back});
  * "I was pressed!" and nothing.
  */
 void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "( ͡° ͜ʖ ͡°)");
-	} else {
-		pros::lcd::clear_line(2);
-	}
+    static bool pressed = false;
+    pressed = !pressed;
+    if (pressed) {
+        pros::lcd::set_text(2, "( ͡° ͜ʖ ͡°)");
+    } else {
+        pros::lcd::clear_line(2);
+    }
 }
 
 /**
@@ -48,10 +48,10 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "balls");
+    pros::lcd::initialize();
+    pros::lcd::set_text(1, "balls");
 
-	pros::lcd::register_btn1_cb(on_center_button);
+    pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -71,9 +71,9 @@ void disabled() {}
  * starts.
  */
 void competition_initialize() {
-	group_left_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
-	group_right_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
-	lift.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_COAST);
+    group_left_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+    group_right_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+    lift.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_COAST);
 }
 
 /**
@@ -104,28 +104,28 @@ void autonomous() {}
  */
 void opcontrol() {
 
-	while (true) {
-		// Get the joystick values for each side (adjust based on your controller configuration)
-		int left_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
-		int right_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
+    while (true) {
+        // Get the joystick values for each side (adjust based on controller configuration)
+        int left_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
+        int right_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
 
-		group_left_drive.move(left_joy_value);
-		group_right_drive.move(right_joy_value);
+        group_left_drive.move(left_joy_value);
+        group_right_drive.move(right_joy_value);
 
-		if(left_joy_value == 0) group_left_drive.brake();
-		if(right_joy_value == 0) group_right_drive.brake();
+        if(left_joy_value == 0) group_left_drive.brake();
+        if(right_joy_value == 0) group_right_drive.brake();
 
-		if(ctrler.get_digital(DIGITAL_UP)){
-			lift.move_velocity(100);
-		} else if (ctrler.get_digital(DIGITAL_DOWN)){
-			lift.move_velocity(-100);
-		} else if (ctrler.get_digital(DIGITAL_R1)){
-			intake.move_velocity(200);
-		} else if (ctrler.get_digital(DIGITAL_R2)){
-			intake.move_velocity(-200);
-		} 
+        if(ctrler.get_digital(DIGITAL_UP)){
+            lift.move_velocity(100);
+        } else if (ctrler.get_digital(DIGITAL_DOWN)){
+            lift.move_velocity(-100);
+        } else if (ctrler.get_digital(DIGITAL_R1)){
+            intake.move_velocity(200);
+        } else if (ctrler.get_digital(DIGITAL_R2)){
+            intake.move_velocity(-200);
+        } 
 
 
-		pros::delay(20);
-	}
+        pros::delay(20);
+    }
 }
