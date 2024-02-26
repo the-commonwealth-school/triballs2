@@ -1,5 +1,30 @@
 #include "main.h"
 
+
+#define PORT_MOTOR_FL 10
+#define PORT_MOTOR_BL 9
+#define PORT_MOTOR_FR 20
+#define PORT_MOTOR_BR 19
+#define PORT_MOTOR_INTAKE 8
+#define PORT_MOTOR_LIFT 2
+
+
+#define MOTOR_MAX  127
+#define GREEN_RPM 200
+#define BLUE_RPM 600
+#define RED_RPM 100
+
+
+pros::Controller ctrler(pros::E_CONTROLLER_MASTER);
+pros::Motor left_front(PORT_MOTOR_FL,pros::motor_gearset_e_t::E_MOTOR_GEAR_600, false);
+pros::Motor left_back(PORT_MOTOR_BL, pros::motor_gearset_e_t::E_MOTOR_GEAR_600, false);
+pros::Motor right_front(PORT_MOTOR_FR, pros::motor_gearset_e_t::E_MOTOR_GEAR_600, true);
+pros::Motor right_back(PORT_MOTOR_BR, pros::motor_gearset_e_t::E_MOTOR_GEAR_600, true);
+pros::Motor lift(PORT_MOTOR_LIFT, pros::motor_gearset_e_t::E_MOTOR_GEAR_100, false);
+pros::Motor intake(PORT_MOTOR_INTAKE, pros::motor_gearset_e_t::E_MOTOR_GEAR_200, false);
+pros::Motor_Group group_left_drive ({left_front, left_back});
+pros::Motor_Group group_right_drive ({right_front, right_back});
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -45,7 +70,11 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+	group_left_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+	group_right_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+	lift.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_COAST);
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -74,19 +103,28 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
 
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+		// Get the joystick values for each side (adjust based on your controller configuration)
+		int left_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
+		int right_joy_value = ctrler.get_analog(ANALOG_LEFT_Y);
 
-		left_mtr = left;
-		right_mtr = right;
+		group_left_drive.move(left_joy_value);
+		group_right_drive.move(right_joy_value);
+
+		if(left_joy_value == 0) group_left_drive.brake();
+		if(right_joy_value == 0) group_right_drive.brake();
+
+		if(ctrler.get_digital(DIGITAL_UP)){
+			lift.move_velocity(100);
+		} else if (ctrler.get_digital(DIGITAL_DOWN)){
+			lift.move_velocity(-100);
+		} else if (ctrler.get_digital(DIGITAL_R1)){
+			intake.move_velocity(200);
+		} else if (ctrler.get_digital(DIGITAL_R2)){
+			intake.move_velocity(-200);
+		} 
+
 
 		pros::delay(20);
 	}
