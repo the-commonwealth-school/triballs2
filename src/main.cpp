@@ -49,6 +49,9 @@ void initialize() {
 
     pros::lcd::register_btn1_cb(on_center_button);
     pros::Rotation sensor_rot(PORT_SENSOR_ROT);
+    group_left_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+    group_right_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
+    lift.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_COAST);
 }
 
 /**
@@ -68,9 +71,7 @@ void disabled() {}
  * starts.
  */
 void competition_initialize() {
-    group_left_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
-    group_right_drive.set_brake_modes(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_HOLD);
-    lift.set_brake_mode(pros::motor_brake_mode_e_t::E_MOTOR_BRAKE_COAST);
+    pros::lcd::set_text(2, "Competition Init");
 }
 
 /**
@@ -133,12 +134,16 @@ void opcontrol() {
             lift.move_velocity(RED_RPM);
         } else if (dbtn_val) {
             lift.move_velocity(-RED_RPM);
+        } else {
+            lift.brake();
         }
         
         if (runubbin_val) {
             intake.move_velocity(GREEN_RPM);
         } else if (rlnubbin_val) {
             intake.move_velocity(-GREEN_RPM);
+        } else {
+            intake.brake();
         }
 
         pros::delay(20);
