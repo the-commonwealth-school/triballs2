@@ -6,6 +6,7 @@
 #define PORT_MOTOR_BR 19        /* Back right.*/
 #define PORT_MOTOR_INTAKE 8
 #define PORT_MOTOR_LIFT 2
+#define PORT_SENSOR_ROT 3        /* Rotation sensor. */
 
 #define MOTOR_MAX  127
 #define GREEN_RPM 200
@@ -13,6 +14,7 @@
 #define RED_RPM 100
 
 
+/* Shouldn't these go in `initialize()`? */
 pros::Controller ctrler(pros::E_CONTROLLER_MASTER);
 pros::Motor left_front(PORT_MOTOR_FL,pros::motor_gearset_e_t::E_MOTOR_GEAR_600, false);
 pros::Motor left_back(PORT_MOTOR_BL, pros::motor_gearset_e_t::E_MOTOR_GEAR_600, false);
@@ -29,7 +31,7 @@ void on_center_button() {
     static bool pressed = false;
     pressed = !pressed;
     if (pressed) {
-        pros::lcd::set_text(2, "( ͡° ͜ʖ ͡°)");
+        pros::lcd::set_text(2, "hello  there");
     } else {
         pros::lcd::clear_line(2);
     }
@@ -46,6 +48,7 @@ void initialize() {
     pros::lcd::set_text(1, "balls");
 
     pros::lcd::register_btn1_cb(on_center_button);
+    pros::Rotation sensor_rot(PORT_SENSOR_ROT);
 }
 
 /**
