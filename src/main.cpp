@@ -4,9 +4,9 @@
 #define PORT_MOTOR_BL 9         /* Back left.*/
 #define PORT_MOTOR_FR 20        /* Front right. */
 #define PORT_MOTOR_BR 19        /* Back right.*/
-#define PORT_MOTOR_INTAKE 8
-#define PORT_MOTOR_LIFT 2
-#define PORT_SENSOR_ROT 3        /* Rotation sensor. */
+#define PORT_MOTOR_INTAKE 8     /* Ball gripper.*/
+#define PORT_MOTOR_LIFT 2       /* Lift. */
+#define PORT_SENSOR_ROT 3       /* Rotation sensor (maybe). */
 
 #define MOTOR_MAX  127
 #define GREEN_RPM 200
