@@ -90,20 +90,19 @@ void autonomous() {
         3. Take ball wherever.
     */
 
-    intake.move_velocity(GREEN_RPM);
-    group_left_drive.move(MOTOR_MAX / 2);
+    intake.move_velocity(GREEN_RPM);        /* Spin up intake. */
+    delay(1 << 9);                          /* Wait half a second, to make sure intake is at full speed. */
+    group_left_drive.move(MOTOR_MAX / 2);   /* Drive forward for 1 second. */
     group_right_drive.move(MOTOR_MAX / 2);
     delay(1 << 10);
     group_left_drive.brake();
     group_right_drive.brake();
-    delay(1 << 10);
+    delay(1 << 9);                          /* Keep the intake spinning for half a second, to make sure the ball stays in there. */
     intake.brake();
 
-    /* Spin.*/
-    while (1) {
-        group_right_drive.move(MOTOR_MAX);
-        group_left_drive.move(-MOTOR_MAX);
-    }
+    /* Spin. */
+    group_right_drive.move(MOTOR_MAX);
+    group_left_drive.move(-MOTOR_MAX);
 }
 
 /**
