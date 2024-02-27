@@ -13,7 +13,6 @@
 #define BLUE_RPM 600
 #define RED_RPM 100
 
-using namespace std;
 using namespace pros;
 
 Controller ctrler(E_CONTROLLER_MASTER);
@@ -85,6 +84,21 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+    /*
+        1. Start spinning intake.
+        2. Move forward, grab ball.
+        3. Take ball wherever.
+    */
+
+    intake.move_velocity(GREEN_RPM);
+    group_left_drive.move(MOTOR_MAX / 2);
+    group_right_drive.move(MOTOR_MAX / 2);
+    delay(1 << 10);
+    group_left_drive.brake();
+    group_right_drive.brake();
+    delay(1 << 10);
+    intake.brake();
+
     /* Spin.*/
     while (1) {
         group_right_drive.move(MOTOR_MAX);
