@@ -84,8 +84,8 @@ void competition_initialize() {
 void autonomous() {
     /* Spin.*/
     while (1) {
-        group_right_drive.move(127);
-        group_left_drive.move(-127);
+        group_right_drive.move(MOTOR_MAX);
+        group_left_drive.move(-MOTOR_MAX);
     }
 }
 
