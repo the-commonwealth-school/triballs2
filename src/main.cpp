@@ -6,12 +6,14 @@
 #define PORT_MOTOR_BR 19        /* Back right.*/
 #define PORT_MOTOR_INTAKE 8     /* Ball gripper.*/
 #define PORT_MOTOR_LIFT 2       /* Lift. */
-#define PORT_SENSOR_ROT 3       /* Rotation sensor (maybe). */
 
 #define MOTOR_MAX  127
 #define GREEN_RPM 200
 #define BLUE_RPM 600
 #define RED_RPM 100
+
+#define DRIVETRAIN_TRACK    /* Instert drivetrain width here.*/
+#define DRIVETRAIN_BASE     /* Instert drivetrain wheel base here.*/
 
 using namespace pros;
 
@@ -26,6 +28,7 @@ Motor
 Motor_Group
     group_left_drive ({left_front, left_back}),
     group_right_drive ({right_front, right_back});
+// ADIDigitalIn lim_switch(1);
 
 /* Center button callback. */
 void on_center_button() {
@@ -122,7 +125,7 @@ void opcontrol() {
     while (1) {
         int
             ljoy_val = ctrler.get_analog(ANALOG_LEFT_Y),    /* Left joystick value.*/
-            rjoy_val = ctrler.get_analog(ANALOG_RIGHT_Y),    /* Right joystick value.*/
+            rjoy_val = ctrler.get_analog(ANALOG_RIGHT_Y),   /* Right joystick value.*/
             lunubbin_val = ctrler.get_digital(DIGITAL_L1),  /* Left upper nubbin value.*/
             llnubbin_val = ctrler.get_digital(DIGITAL_L2),  /* Left lower nubbin value.*/
             runubbin_val = ctrler.get_digital(DIGITAL_R1),  /* Right upper nubbin value.*/
@@ -151,6 +154,8 @@ void opcontrol() {
         } else {
             intake.brake();
         }
+
+// lcd::set_text(3, std::to_string(lim_switch.get_value()));
 
         delay(20);
     }
