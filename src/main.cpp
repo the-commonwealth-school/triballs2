@@ -1,5 +1,7 @@
 #include "main.h"
 
+#define MAX(A, B) (A > B ? A : B)
+
 #define PORT_MOTOR_FL 10        /* Front left.*/
 #define PORT_MOTOR_BL 9         /* Back left.*/
 #define PORT_MOTOR_FR 20        /* Front right. */
@@ -154,6 +156,13 @@ void opcontrol() {
         } else {
             intake.brake();
         }
+
+        double maxtemp =  MAX(
+            MAX(group_left_drive.get_temperatures()[0], group_left_drive.get_temperatures()[1]),
+            MAX(group_right_drive.get_temperatures()[0], group_right_drive.get_temperatures()[1])
+        );
+
+        ctrler.print(0, 0, "MAXT: %f", maxtemp);
 
 // lcd::set_text(3, std::to_string(lim_switch.get_value()));
 
