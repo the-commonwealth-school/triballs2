@@ -1,3 +1,3 @@
 pending better name.
 
-endorsed by linus torvalds?
+endorsed by linus torvalds.
