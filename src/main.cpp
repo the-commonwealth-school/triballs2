@@ -42,7 +42,8 @@ void on_center_button() {
         lcd::clear_line(2);
     }
 
-    
+
+
 }
 
 /**
