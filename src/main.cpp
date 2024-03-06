@@ -41,6 +41,8 @@ void on_center_button() {
     } else {
         lcd::clear_line(2);
     }
+
+    
 }
 
 /**
