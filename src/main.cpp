@@ -41,6 +41,10 @@ void on_center_button() {
     } else {
         lcd::clear_line(2);
     }
+
+
+
+
 }
 
 /**
@@ -134,6 +138,8 @@ void opcontrol() {
             rlnubbin_val = ctrler.get_digital(DIGITAL_R2),  /* Right lower nubbin value.*/
             ubtn_val = ctrler.get_digital(DIGITAL_UP),      /* Up arrow button value.*/
             dbtn_val = ctrler.get_digital(DIGITAL_DOWN);    /* Down arrow button value.*/
+
+            
 
         if (!ljoy_val) { group_left_drive.brake(); }
         if (!rjoy_val) { group_right_drive.brake(); }
